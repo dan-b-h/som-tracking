@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Media Tracking — Glossar</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f4f0;
+      --surface: #ffffff;
+      --surface-alt: #f9f8f5;
+      --border: rgba(0,0,0,0.1);
+      --border-strong: rgba(0,0,0,0.18);
+      --text-primary: #1a1a18;
+      --text-secondary: #5a5a56;
+      --text-muted: #9a9a94;
+      --accent: #3366cc;
+      --accent-bg: #e8eef8;
+      --accent-text: #1a3d7a;
+      --success-bg: #eaf3de;
+      --success-text: #2d5a0e;
+      --success-border: #a8cc78;
+      --pro-bg: #eeedfe;
+      --pro-text: #3c3489;
+      --pro-border: #afa9ec;
+      --warning-bg: #faeeda;
+      --warning-text: #633806;
+      --warning-border: #f0c060;
+      --danger-bg: #fcebeb;
+      --danger-text: #791f1f;
+      --danger-border: #f09595;
+      --bestpractice-bg: #e1f5ee;
+      --bestpractice-text: #085041;
+      --bestpractice-border: #5dcaa5;
+      --radius: 8px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a18;
+        --surface: #252522;
+        --surface-alt: #2c2c2a;
+        --border: rgba(255,255,255,0.1);
+        --border-strong: rgba(255,255,255,0.18);
+        --text-primary: #f0efe8;
+        --text-secondary: #a8a89e;
+        --text-muted: #6a6a64;
+        --accent: #6699ee;
+        --accent-bg: #1a2a4a;
+        --accent-text: #99bbff;
+        --success-bg: #0d2a08;
+        --success-text: #90c060;
+        --success-border: #2d6010;
+        --pro-bg: #1e1a42;
+        --pro-text: #afa9ec;
+        --pro-border: #3c3489;
+        --warning-bg: #2a1a04;
+        --warning-text: #e0a040;
+        --warning-border: #6a3808;
+        --danger-bg: #2a0808;
+        --danger-text: #f09595;
+        --danger-border: #7a1f1f;
+        --bestpractice-bg: #042a1e;
+        --bestpractice-text: #5dcaa5;
+        --bestpractice-border: #0a5040;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .page-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    header { margin-bottom: 2rem; }
+    header h1 { font-size: 22px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+    header p { font-size: 14px; color: var(--text-secondary); }
+
+    .meta-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .pill { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px; }
+    .pill-count { background: var(--accent-bg); color: var(--accent-text); }
+
+    .section-label {
+      font-size: 11px; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.07em;
+      margin: 2rem 0 8px;
+    }
+
+    .entry {
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .entry.bestpractice { border-color: var(--bestpractice-border); }
+
+    .entry-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; cursor: pointer; user-select: none;
+      transition: background 0.15s;
+    }
+    .entry-header:hover { background: var(--surface-alt); }
+
+    .entry-num { font-size: 11px; font-weight: 500; color: var(--text-muted); min-width: 22px; }
+    .entry-title { font-size: 15px; font-weight: 500; color: var(--text-primary); flex: 1; }
+
+    .tag {
+      font-size: 11px; font-weight: 500; padding: 2px 8px;
+      border-radius: 20px; white-space: nowrap;
+    }
+    .tag-client    { background: var(--success-bg); color: var(--success-text); }
+    .tag-server    { background: var(--pro-bg); color: var(--pro-text); }
+    .tag-tool      { background: var(--warning-bg); color: var(--warning-text); }
+    .tag-concept   { background: var(--accent-bg); color: var(--accent-text); }
+    .tag-dsgvo     { background: var(--danger-bg); color: var(--danger-text); }
+    .tag-bp        { background: var(--bestpractice-bg); color: var(--bestpractice-text); }
+
+    .chevron {
+      font-size: 18px; color: var(--text-muted);
+      transition: transform 0.2s; display: inline-block; line-height: 1;
+    }
+    .chevron.open { transform: rotate(180deg); }
+
+    .entry-body {
+      display: none;
+      padding: 4px 16px 18px 50px;
+      border-top: 0.5px solid var(--border);
+    }
+    .entry-body.open { display: block; }
+
+    .entry-body p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-top: 12px; }
+    .entry-body strong { color: var(--text-primary); font-weight: 500; }
+    .entry-body code {
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 12px; background: var(--surface-alt);
+      padding: 1px 5px; border-radius: 4px; color: var(--text-primary);
+    }
+    .entry-body a { color: var(--accent); text-decoration: none; }
+    .entry-body a:hover { text-decoration: underline; }
+
+    .box {
+      background: var(--surface-alt);
+      border-left: 2px solid var(--accent);
+      padding: 10px 14px; margin-top: 12px;
+      font-size: 13px; color: var(--text-secondary);
+      line-height: 1.75; border-radius: 0 4px 4px 0;
+    }
+    .box.green  { border-color: var(--success-border); background: var(--success-bg); color: var(--success-text); }
+    .box.purple { border-color: var(--pro-border); background: var(--pro-bg); color: var(--pro-text); }
+    .box.red    { border-color: var(--danger-border); background: var(--danger-bg); color: var(--danger-text); }
+    .box strong { color: inherit; }
+
+    .box-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; opacity: 0.65; margin-bottom: 6px;
+    }
+
+    footer {
+      margin-top: 3rem; padding-top: 1.5rem;
+      border-top: 0.5px solid var(--border);
+      font-size: 12px; color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header>
+    <h1>Social Media Tracking — Glossar</h1>
+    <p>Kompakte Erklärungen der wichtigsten Tracking-Begriffe für Social Media Teams.</p>
+    <div class="meta-row">
+      <span class="pill pill-count">21 Begriffe</span>
+    </div>
+  </header>
+
+  <div id="glossar"></div>
+
+  <footer>Internes Dokument · Stand Juni 2025</footer>
+</div>
+
+<script>
+const sections = [
+  {
+    label: "Grundlagen",
+    items: [
+      {
+        title: "Pixel",
+        tag: "tag-client", tagLabel: "Clientside",
+        body: `
+          <p>Ein <strong>Pixel</strong> ist ein unsichtbares JavaScript-Snippet, das einmalig in die Website eingebaut wird. Es beobachtet, was Besucher tun, und schickt diese Informationen an die jeweilige Werbeplattform.</p>
+          <div class="box">
+            <div class="box-label">Pixel nach Plattform</div>
+            <strong>Meta:</strong> Meta Pixel (früher Facebook Pixel)<br>
+            <strong>TikTok:</strong> TikTok Pixel<br>
+            <strong>LinkedIn:</strong> LinkedIn Insight Tag<br>
+            <strong>Google:</strong> Global Site Tag (gtag.js)
+          </div>
+          <p>Alle funktionieren gleich — der Name ist je nach Plattform anders. Ein Pixel allein reicht heute oft nicht mehr aus, weshalb er idealerweise mit Serverside Tracking kombiniert wird.</p>
+        `
+      },
+      {
+        title: "Tracking Plugin (z.B. WeltPixel / PixelYourSite)",
+        tag: "tag-tool", tagLabel: "Tool",
+        body: `
+          <p>Für gängige E-Commerce- oder CMS-Plattformen gibt es <strong>Tracking Plugins</strong>, die den Pixel und das Event-Tracking ohne eigenen Code einrichten. Sie sind der schnellste Weg zum funktionierenden Setup — ohne Entwickler.</p>
+          <div class="box">
+            <div class="box-label">Bekannte Plugins</div>
+            <strong>WeltPixel:</strong> Speziell für Magento / Adobe Commerce — unterstützt Meta, Google, TikTok und mehr, inkl. Enhanced E-Commerce Events<br><br>
+            <strong>PixelYourSite:</strong> Für WordPress / WooCommerce — setzt Meta Pixel, TikTok Pixel, Pinterest und GA4 auf, inkl. automatischer Standard Events für Käufe, Warenkorbaktionen usw.
+          </div>
+          <p>⚠️ Plugins decken Standardfälle gut ab — für komplexe Custom Events oder Serverside Tracking braucht man meist trotzdem einen Entwickler oder GTM-Kenntnisse.</p>
+        `
+      },
+      {
+        title: "Client- / Browserside Tracking",
+        tag: "tag-client", tagLabel: "Clientside",
+        body: `
+          <p>Das <strong>klassische Tracking-Modell</strong>: Der Pixel läuft direkt im Browser des Users und sendet Ereignisse wie Seitenaufrufe, Käufe oder Formulareinsendungen direkt an die Plattform.</p>
+          <div class="box">
+            <div class="box-label">Wie es funktioniert</div>
+            Browser des Users → Pixel-Script wird geladen → Event wird gesendet → Plattform empfängt Daten
+          </div>
+          <p>⚠️ <strong>Problem:</strong> Adblocker, Browser-Privacy-Einstellungen (Safari ITP, Firefox ETP) oder Cookie-Ablehnungen können dieses Tracking blockieren oder einschränken. Deshalb ist Serverside Tracking heute oft die bessere Ergänzung.</p>
+        `
+      },
+      {
+        title: "Serverside Tracking (CAPI / Conversions API / Events API)",
+        tag: "tag-server", tagLabel: "Serverside",
+        body: `
+          <p>Beim <strong>Serverside Tracking</strong> werden Events nicht vom Browser, sondern von einem Server (oder einem Middleware-Dienst wie Stape.io) direkt an die Plattform gesendet — unabhängig vom Browser des Users.</p>
+          <div class="box">
+            <div class="box-label">Plattform-Bezeichnungen</div>
+            <strong>Meta:</strong> Conversions API (CAPI)<br>
+            <strong>TikTok:</strong> Events API<br>
+            <strong>Google:</strong> Enhanced Conversions / Google Tag via Server<br>
+            <strong>LinkedIn:</strong> Conversions API (CAPI)
+          </div>
+          <p>✅ <strong>Vorteil:</strong> Wird deutlich weniger durch Adblocker oder Browser-Einstellungen blockiert als Browserside Tracking, bessere Datenqualität, weniger Abhängigkeit von Cookies. Ideal in Kombination mit Browserside Tracking — beide parallel = maximale Datenabdeckung.</p>
+          <p>LinkedIn CAPI wird über den LinkedIn Campaign Manager eingerichtet. Besonders relevant im B2B-Bereich, wo Conversions oft später und seltener stattfinden.</p>
+        `
+      },
+      {
+        title: "Hybrides Tracking Setup (Client + Server) ★ Best Practice",
+        tag: "tag-bp", tagLabel: "Best Practice",
+        bp: true,
+        body: `
+          <p>Das <strong>hybride Tracking Setup</strong> kombiniert Browserside (Pixel) und Serverside Tracking (CAPI) parallel — und ist heute der Industriestandard für professionelles Social Media Tracking.</p>
+          <div class="box">
+            <div class="box-label">Warum beide zusammen?</div>
+            <strong>Pixel allein:</strong> Wird von Adblockern / Safari teilweise blockiert → Datenverlust 20–40%<br>
+            <strong>CAPI allein:</strong> Kein Browser-Kontext, keine Cookie-Daten → schlechterer Match Score<br>
+            <strong>Beide zusammen:</strong> Maximale Datenabdeckung + hoher Match Score + Deduplication verhindert Doppelzählung
+          </div>
+          <div class="box green">
+            <div class="box-label">So sieht ein hybrides Setup aus</div>
+            User kauft im Shop<br><br>
+            → <strong>Pixel (Browser):</strong> sendet Purchase-Event sofort mit Cookie-Daten an Meta<br>
+            → <strong>CAPI (Server):</strong> sendet dasselbe Purchase-Event mit IIPs (E-Mail, Name) an Meta<br>
+            → <strong>Event-ID:</strong> stellt sicher, dass Meta beide erkennt und nur einmal zählt<br><br>
+            Ergebnis: Meta hat mehr Daten, besserer Match Score, präzisere Optimierung
+          </div>
+          <p>Ein hybrides Setup braucht zwingend eine <strong>Event-ID zur Deduplication</strong>. Ohne sie zählt jede Conversion doppelt. Die technische Umsetzung läuft meist über GTM Web-Container (Pixel) + GTM Server-Container via Stape.io (CAPI).</p>
+        `
+      },
+      {
+        title: "Cookielose Zukunft / First-Party Data",
+        tag: "tag-concept", tagLabel: "Konzept",
+        body: `
+          <p>Lange funktionierte Tracking hauptsächlich über <strong>Third-Party Cookies</strong>. Browser wie Safari und Firefox blockieren diese bereits stark. Ob und wann Chrome vollständig nachzieht, ist noch offen — die Richtung ist jedoch klar: Abhängigkeiten von Drittanbieter-Cookies werden schrittweise reduziert.</p>
+          <div class="box">
+            <div class="box-label">Was das bedeutet</div>
+            <strong>Third-Party Cookie (under pressure):</strong> Plattform trackt User plattformübergreifend — wird zunehmend eingeschränkt<br><br>
+            <strong>First-Party Data (Zukunft):</strong> Du sammelst selbst Daten deiner eigenen User (z.B. E-Mail bei Newsletter-Anmeldung) und gibst diese gehasht an die Plattform weiter
+          </div>
+          <p>Sich mit einem hybriden Setup (Pixel + CAPI) und First-Party Data abzusichern ist heute die klügste Strategie — unabhängig davon, wie schnell die Veränderung kommt. Wer früh gutes First-Party Data aufbaut, ist auf der sicheren Seite.</p>
+        `
+      },
+    ]
+  },
+  {
+    label: "Tag Manager",
+    items: [
+      {
+        title: "GTM — Google Tag Manager",
+        tag: "tag-tool", tagLabel: "Tool",
+        body: `
+          <p><strong>Google Tag Manager (GTM)</strong> ist ein kostenloses Tool von Google, mit dem Tracking-Codes (Tags) auf der Website verwaltet werden — ohne direkt im Website-Code herumzubauen.</p>
+          <div class="box">
+            <div class="box-label">Grundprinzip</div>
+            1× GTM-Snippet in Website einbauen<br>
+            → danach alles über die GTM-Oberfläche steuern:<br>
+            Tags hinzufügen · Trigger definieren · Variablen setzen
+          </div>
+          <p>GTM gibt es als <strong>Web-Container</strong> (Browserside) und als <strong>Server-Container</strong> (Serverside). Für ein hybrides Tracking-Setup braucht man heute oft beide.</p>
+        `
+      },
+      {
+        title: "Tag",
+        tag: "tag-tool", tagLabel: "GTM",
+        body: `
+          <p>Ein <strong>Tag</strong> im Google Tag Manager ist ein Code-Snippet oder eine Konfiguration, die ausgeführt wird, wenn ein Trigger zutrifft. Der Tag ist das <em>Was passiert</em>.</p>
+          <div class="box">
+            <div class="box-label">Beispiele</div>
+            Meta Pixel Kauf-Event feuern<br>
+            Google Ads Conversion tracken<br>
+            TikTok PageView senden
+          </div>
+          <p>Ein Tag braucht immer mindestens einen Trigger. GTM bündelt alle Tags an einem Ort — kein manueller Code-Einbau in die Website nötig.</p>
+        `
+      },
+      {
+        title: "Trigger",
+        tag: "tag-tool", tagLabel: "GTM",
+        body: `
+          <p>Ein <strong>Trigger</strong> im Google Tag Manager bestimmt, <em>wann</em> ein Tag ausgelöst wird. Er ist die Bedingung, unter der etwas passiert.</p>
+          <div class="box">
+            <div class="box-label">Beispiele</div>
+            "Seite geladen" → alle Seiten<br>
+            "Klick auf Button" → nur bei Buttons mit Klasse .kauf-btn<br>
+            "Formular abgesendet" → nur bei Formular #kontakt
+          </div>
+          <p>Trigger = <strong>Auslöser</strong>. Ohne Trigger feuert kein Tag. Mehrere Trigger können für einen Tag kombiniert werden (OR-Logik), oder Ausnahmen können definiert werden.</p>
+        `
+      },
+      {
+        title: "Test Events / Debug-Modus",
+        tag: "tag-tool", tagLabel: "Tool",
+        body: `
+          <p>Bevor ein Tracking-Setup live geht, muss geprüft werden, ob alles korrekt feuert. Dafür gibt es plattformseitige Debug-Tools und den GTM Preview Mode.</p>
+          <div class="box">
+            <div class="box-label">Wichtigste Debug-Tools</div>
+            <strong>GTM Preview Mode:</strong> Zeigt in Echtzeit, welche Tags und Trigger auf der Seite feuern<br>
+            <strong>Meta Events Manager → Test Events:</strong> Zeigt live, welche Events Meta empfängt — inkl. Parameter<br>
+            <strong>Meta Pixel Helper:</strong> Browser-Extension, die direkt auf der Website zeigt, ob der Pixel korrekt feuert
+          </div>
+          <p>Faustregel: <strong>Nie live schalten ohne vorher im Debug-Modus zu testen.</strong> Ein falsch gesetzter Trigger kann dazu führen, dass Events gar nicht oder hundertfach feuern — beides kostet Geld und verfälscht die Daten.</p>
+        `
+      },
+      {
+        title: "Stape.io",
+        tag: "tag-tool", tagLabel: "Tool",
+        body: `
+          <p><strong>Stape.io</strong> ist ein Managed-Service für Server-Side Tagging — ein gehosteter Server, der zwischen der Website und den Werbe-Plattformen sitzt.</p>
+          <div class="box">
+            <div class="box-label">Was Stape macht</div>
+            Hostet den GTM Server Container<br>
+            Leitet Serverside Events weiter (Meta CAPI, TikTok Events API usw.)<br>
+            Bietet Zusatztools: Custom Domains, Cookie-Verlängerung, IIP-Proxy
+          </div>
+          <p>Statt selbst einen Server aufzusetzen (teuer, technisch komplex), wird bei Stape eine fertige Infrastruktur gemietet. Besonders beliebt für kleinere bis mittelgrosse Setups ohne eigene Entwickler.</p>
+        `
+      },
+    ]
+  },
+  {
+    label: "Events & Conversions",
+    items: [
+      {
+        title: "Standard Events vs. Custom Events",
+        tag: "tag-concept", tagLabel: "Konzept",
+        body: `
+          <p>Plattformen wie Meta unterscheiden zwischen <strong>Standard Events</strong> (von der Plattform vorgegeben) und <strong>Custom Events</strong> (selbst definiert). Wichtig: <strong>Jede Plattform hat ihre eigenen Standard Event-Namen</strong> — sie sind nicht plattformübergreifend einheitlich.</p>
+          <div class="box">
+            <div class="box-label">Beispiele: Unterschiede zwischen Plattformen</div>
+            <strong>Kauf-Event:</strong><br>
+            Meta: <code>Purchase</code><br>
+            TikTok: <code>CompletePayment</code><br>
+            Google (GA4): <code>purchase</code><br><br>
+            <strong>Lead-Event:</strong><br>
+            Meta: <code>Lead</code><br>
+            TikTok: <code>SubmitForm</code><br>
+            Google (GA4): <code>generate_lead</code><br><br>
+            <strong>Produktseite angesehen:</strong><br>
+            Meta: <code>ViewContent</code><br>
+            TikTok: <code>ViewContent</code> (hier gleich)<br>
+            Google (GA4): <code>view_item</code>
+          </div>
+          <p>Eine vollständige Übersicht der Standard Events je Plattform gibt es bei <a href="https://www.simoahava.com" target="_blank" rel="noopener">simoahava.com</a> — eine der besten Ressourcen für Tracking-Dokumentation.</p>
+          <p>Standard Events haben den Vorteil, dass die Plattform sie kennt und direkt für Optimierung und Reporting nutzen kann. Custom Events sind flexibler, müssen aber als Custom Conversion definiert werden, bevor die Plattform damit optimieren kann.</p>
+        `
+      },
+      {
+        title: "Custom Event",
+        tag: "tag-concept", tagLabel: "Konzept",
+        body: `
+          <p>Ein <strong>Custom Event</strong> ist ein selbst benanntes Ereignis, das über Code oder den Tag Manager definiert und an die Plattform gesendet wird — für Aktionen, die kein Standard Event abdeckt.</p>
+          <div class="box">
+            <div class="box-label">Beispiel: 10s_50Scroll</div>
+            Dieses Custom Event feuert, wenn ein User mindestens <strong>10 Sekunden</strong> auf der Seite verbracht hat <strong>und</strong> mindestens <strong>50% der Seite gescrollt</strong> hat.<br><br>
+            Event-Name: <code>10s_50Scroll</code><br><br>
+            Beide Bedingungen müssen gleichzeitig erfüllt sein — es reicht nicht, nur zu scrollen oder nur zu verweilen.
+          </div>
+          <p>Weitere Beispiele: "Quiz abgeschlossen", "Kalkulator genutzt", "Video bis 75% angesehen". Alles, was kein Standard Event ist, kann als Custom Event abgebildet werden.</p>
+        `
+      },
+      {
+        title: "Custom Conversion",
+        tag: "tag-concept", tagLabel: "Konzept",
+        body: `
+          <p>Eine <strong>Custom Conversion</strong> wird direkt in der Plattform aufgesetzt (z.B. in Meta) — ohne Code oder Tag Manager. Sie definiert, wann ein Event als Conversion zählen soll, und kann auf bestimmte URLs oder Kampagnen eingeschränkt werden.</p>
+          <div class="box">
+            <div class="box-label">Beispiel: 10s_50Scroll auf Schneesportkampagne</div>
+            Event: <code>10s_50Scroll</code><br>
+            Bedingung: URL enthält "schneesport"<br>
+            → Name in Meta: "10s_50Scroll – Schneesportkampagne"<br><br>
+            So können für verschiedene Kampagnen oder Produktbereiche separate Conversions erstellt werden, ohne jedes Mal neuen Code zu schreiben.
+          </div>
+          <p>⚠️ Custom Conversions sind praktisch für schnelle Setups, aber weniger flexibel als Custom Events mit eigenen Parametern. Sie werden ausschliesslich in der jeweiligen Plattform konfiguriert — nicht im GTM.</p>
+        `
+      },
+      {
+        title: "Event Parameter",
+        tag: "tag-concept", tagLabel: "Konzept",
+        body: `
+          <p><strong>Event Parameter</strong> sind zusätzliche Datenpunkte, die mit einem Event mitgeschickt werden — sie geben dem Event seinen Kontext.</p>
+          <div class="box">
+            <div class="box-label">Beispiel: Purchase-Event</div>
+            <code>value: 89.99</code> — Bestellwert<br>
+            <code>currency: "CHF"</code> — Währung<br>
+            <code>content_ids: ["SKU-42"]</code> — Produkt-ID<br>
+            <code>num_items: 2</code> — Anzahl Artikel
+          </div>
+          <p>Je mehr und präzisere Parameter mitgeschickt werden, desto besser kann die Plattform optimieren — z.B. den ROAS berechnen oder ähnliche Käufer finden.</p>
+        `
+      },
+    ]
+  },
+  {
+    label: "Datenqualität & Attribution",
+    items: [
+      {
+        title: "Event-ID & Deduplication",
+        tag: "tag-concept", tagLabel: "Konzept",
+        body: `
+          <p>Die <strong>Event-ID</strong> ist eine eindeutige Kennung für ein einzelnes Tracking-Ereignis. Sie verhindert, dass dasselbe Event doppelt gezählt wird — etwa wenn Browser und Server gleichzeitig dasselbe Event senden.</p>
+          <div class="box">
+            <div class="box-label">Typisches Format (Unix Timestamp + User-ID)</div>
+            <code>eventId: "1718700000_usr4872"</code><br><br>
+            Der erste Teil ist ein Unix-Timestamp (Sekunden seit 01.01.1970) — z.B. <code>1718700000</code> für einen bestimmten Zeitpunkt am 18. Juni 2024. Der zweite Teil ist eine interne User-ID. Zusammen ist diese Kombination für jedes einzelne Event einmalig.
+          </div>
+          <div class="box">
+            <div class="box-label">Wie Deduplication funktioniert</div>
+            Browser sendet Kauf-Event mit ID <code>1718700000_usr4872</code><br>
+            Server sendet dasselbe Kauf-Event mit ID <code>1718700000_usr4872</code><br>
+            → Meta erkennt: beide = gleiches Ereignis → zählt nur einmal<br><br>
+            ⚠️ Ohne Event-IDs: derselbe Kauf zählt doppelt → Budget-Verschwendung, falsche ROAS-Berechnung
+          </div>
+          <p>Deduplication ist einer der häufigsten Fehler beim CAPI-Setup — und einer der teuersten. Wenn plötzlich doppelt so viele Conversions erscheinen wie erwartet, ist fehlende oder falsche Deduplication meist der Grund. Deshalb ist die Event-ID genauso wichtig wie das Event selbst: ohne sie ist ein hybrides Setup wertlos.</p>
+        `
+      },
+      {
+        title: "Match Quality / Event Match Score",
+        tag: "tag-concept", tagLabel: "Konzept",
+        body: `
+          <p>Meta bewertet für jedes Event, wie gut es einem echten Facebook/Instagram-Nutzer zugeordnet werden konnte. Das Ergebnis ist der <strong>Event Match Score</strong> — eine Zahl von 0 bis 10, sichtbar im Meta Events Manager.</p>
+          <div class="box">
+            <div class="box-label">Score-Einschätzung</div>
+            <strong>Score unter 4:</strong> Kritisch — kaum Attribution möglich, genauer anschauen<br>
+            <strong>Score 4–5:</strong> Akzeptabel — typisch wenn wenig IIP-Daten vorhanden sind<br>
+            <strong>Score 6–10:</strong> Sehr gut — ausreichend IIP-Daten vorhanden
+          </div>
+          <div class="box">
+            <div class="box-label">Wichtiger Kontext</div>
+            Nicht jedes Signal liefert E-Mail, Telefon und Name — z.B. beim <code>10s_50Scroll</code> Event ist der User anonym. Das ist normal und datenschutzkonform.<br><br>
+            Meta hat ein <strong>eigenes Interesse</strong> daran, möglichst viele Nutzerdaten zu erhalten — entsprechend zeigt die Plattform tendenziell tiefere Scores an, um zur Übermittlung von mehr IIPs zu motivieren.<br><br>
+            ⚠️ Datenschutz geht vor: IIPs dürfen nur gehasht und nur mit gültigem Consent übermittelt werden.
+          </div>
+          <p>Ein Score ab 4 ist in der Praxis in Ordnung — nicht jedes Event kann hohe Werte erzielen. Liegt der Score dauerhaft unter 4, lohnt sich eine Analyse, ob mehr IIP-Daten datenschutzkonform übergeben werden könnten.</p>
+        `
+      },
+      {
+        title: "Attribution Window",
+        tag: "tag-concept", tagLabel: "Konzept",
+        body: `
+          <p>Das <strong>Attribution Window</strong> definiert, wie lange nach einem Klick oder einer Impression eine Conversion noch der Anzeige zugerechnet wird. Es spiegelt die <strong>Customer Journey</strong> wider — also den Weg, den eine Person von der ersten Berührung mit einer Anzeige bis zur Conversion zurücklegt.</p>
+          <div class="box">
+            <div class="box-label">Konkretes Beispiel: Schweizer Berghilfe</div>
+            <strong>Ziel:</strong> Newsletter-Abonnenten zur Spende bewegen<br><br>
+            1. Montag: Person sieht Meta Ad der Schweizer Berghilfe → klickt aber nicht<br>
+            2. Donnerstag: Person erhält Newsletter, liest ihn — spendet aber noch nicht<br>
+            3. Sonntag (6 Tage nach dem Ad): Person klickt auf den Newsletter-Link und spendet<br><br>
+            → <strong>Bei 7-Tage-Click Attribution:</strong> Meta rechnet sich diese Spende zu — obwohl der finale Klick über den Newsletter kam<br>
+            → <strong>Im Shop-System:</strong> Die Spende wird dem Newsletter-Kanal zugeordnet<br><br>
+            Ergebnis: Meta weist eine Conversion aus, das E-Mail-Tool auch → <strong>Doppelattribution</strong>
+          </div>
+          <p>Das erklärt, warum Meta oft mehr Conversions ausweist als das eigene Shop- oder Donation-System. Verschiedene Plattformen nutzen verschiedene Attribution Windows, was plattformübergreifende Vergleiche erschwert. Das Attribution Window sollte immer bewusst gewählt und im Reporting transparent kommuniziert werden.</p>
+        `
+      },
+      {
+        title: "IIP — identifizierende Informationen",
+        tag: "tag-concept", tagLabel: "Konzept",
+        body: `
+          <p><strong>IIP</strong> steht für <em>Identifiable / Individual Information Parameters</em> — Daten, die eine Person eindeutig identifizieren: E-Mail-Adresse, Telefonnummer, Vor- und Nachname, IP-Adresse.</p>
+          <div class="box">
+            <div class="box-label">Warum es wichtig ist</div>
+            Plattformen können IIP-Daten mit ihren eigenen Nutzerdaten abgleichen (Customer Matching) → bessere Attribution und höherer Event Match Score<br><br>
+            ⚠️ Vor der Übertragung müssen IIPs <strong>gehasht</strong> werden (SHA-256) — Rohwerte dürfen nie gesendet werden<br><br>
+            ⚠️ IIPs dürfen nur mit gültigem <strong>Consent</strong> des Users übermittelt werden
+          </div>
+          <p>Beim Serverside Tracking über die CAPI können gehasht übertragene IIPs die Match-Rate erheblich verbessern. Datenschutz geht dabei immer vor — nur Daten übermitteln, für die ein gültiger Consent vorliegt.</p>
+        `
+      },
+      {
+        title: "UTM-Parameter",
+        tag: "tag-concept", tagLabel: "Konzept",
+        body: `
+          <p><strong>UTM-Parameter</strong> sind Zusätze an einer URL, die festhalten, woher ein Besucher kommt. Sie funktionieren unabhängig vom Pixel in Analytics-Tools wie Google Analytics 4.</p>
+          <div class="box">
+            <div class="box-label">Beispiel-URL</div>
+            <code>meineshop.ch/angebot?utm_source=facebook&utm_medium=paid_social&utm_campaign=schneesport_2025&utm_content=video_creative_A</code>
+          </div>
+          <div class="box red">
+            <div class="box-label">⚠️ Wichtig: utm_source=facebook — nicht "meta" verwenden</div>
+            GA4 nutzt ein <strong>Default Channel Grouping</strong>, das Traffic automatisch Kanälen zuordnet — z.B. "Paid Social". Dieses Grouping erkennt <code>facebook</code> und <code>instagram</code> als Paid Social-Quellen.<br><br>
+            Wird stattdessen <code>utm_source=meta</code> verwendet, erkennt GA4 die Quelle oft nicht korrekt und ordnet den Traffic falsch zu — z.B. als "Unassigned" statt "Paid Social". Das verfälscht das gesamte Channel-Reporting.
+          </div>
+          <p>Faustregel: <code>utm_source=facebook</code> für Meta-Kampagnen, <code>utm_source=instagram</code> für Instagram-spezifische Kampagnen verwenden. UTMs überleben keinen Redirect und gehen verloren, wenn User über eine App kommen.</p>
+        `
+      },
+    ]
+  },
+  {
+    label: "Rechtliches & Datenschutz",
+    items: [
+      {
+        title: "Consent Mode / Cookie Consent",
+        tag: "tag-dsgvo", tagLabel: "DSGVO / DSG",
+        body: `
+          <p>Bevor ein Pixel Daten sammeln darf, muss der User zustimmen. Ein <strong>Cookie Consent Banner</strong> holt diese Zustimmung ein. Der <strong>Consent Mode</strong> (von Google) passt das Tracking automatisch an, je nachdem was der User akzeptiert oder ablehnt.</p>
+          <div class="box">
+            <div class="box-label">Was passiert bei Ablehnung?</div>
+            <strong>Ohne Consent Mode:</strong> Kein Tracking → Datenlücke<br>
+            <strong>Mit Consent Mode:</strong> Kein personenbezogenes Tracking, aber Google modelliert fehlende Conversions statistisch nach (Conversion Modelling)<br><br>
+            Meta: Advanced Matching darf nur bei Zustimmung aktiviert werden
+          </div>
+          <div class="box">
+            <div class="box-label">Schweiz vs. EU — wichtiger Unterschied</div>
+            Die <strong>DSGVO</strong> gilt in der <strong>EU</strong>. Die Schweiz hat ein eigenes Gesetz: das revidierte <strong>Datenschutzgesetz (DSG)</strong>, das seit September 2023 in Kraft ist. Es ist der DSGVO ähnlich, aber nicht identisch.<br><br>
+            <strong>Verantwortung:</strong> Der Kunde ist dafür verantwortlich, einen rechtssicheren Cookie Banner auf seiner Website zu implementieren — nicht die Agentur.<br><br>
+            <strong>Unsere Aufgabe:</strong> Sicherstellen, dass der Pixel korrekt feuert, sobald der User den Consent erteilt hat — und dass er <em>nicht</em> feuert, wenn kein Consent vorliegt.
+          </div>
+          <p>Empfohlene Consent-Tools für DACH: Cookiebot, Usercentrics, Borlabs Cookie. Ohne rechtssicheren Banner riskiert man Abmahnungen und Tracking-Daten, die rechtlich nicht verwertbar sind.</p>
+        `
+      },
+    ]
+  }
+];
+
+const container = document.getElementById("glossar");
+let idx = 0;
+
+sections.forEach(sec => {
+  const secEl = document.createElement("div");
+  secEl.className = "section-label";
+  secEl.textContent = sec.label;
+  container.appendChild(secEl);
+
+  sec.items.forEach(item => {
+    const i = idx++;
+    const entry = document.createElement("div");
+    entry.className = "entry" + (item.bp ? " bestpractice" : "");
+    entry.innerHTML = `
+      <div class="entry-header" onclick="toggle(${i})" role="button" aria-expanded="false" aria-controls="body-${i}">
+        <span class="entry-num">${String(i+1).padStart(2,"0")}</span>
+        <span class="entry-title">${item.title}</span>
+        <span class="tag ${item.tag}">${item.tagLabel}</span>
+        <span class="chevron" id="chev-${i}" aria-hidden="true">&#8964;</span>
+      </div>
+      <div class="entry-body" id="body-${i}" role="region">${item.body}</div>
+    `;
+    container.appendChild(entry);
+  });
+});
+
+function toggle(i) {
+  const body = document.getElementById("body-" + i);
+  const chev = document.getElementById("chev-" + i);
+  const header = chev.closest(".entry-header");
+  const isOpen = body.classList.contains("open");
+  body.classList.toggle("open", !isOpen);
+  chev.classList.toggle("open", !isOpen);
+  header.setAttribute("aria-expanded", !isOpen);
+}
+</script>
+</body>
+</html>
